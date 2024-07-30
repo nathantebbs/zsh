@@ -4,6 +4,14 @@ for ZSH_FILE in "${ZDOTDIR:-$HOME}"/zsh.d/*.zsh(N); do
     source "${ZSH_FILE}"
 done  
 
+# Extra functions
+functions_dir="$ZDOTDIR/functions"
+export fpath=($ZDOTDIR/functions $fpath)
+for file in "$functions_dir"/*; do
+	autoload -U "${file:t}"
+	source "$file"
+done
+
 # zsh completions
 if type brew &>/dev/null; then
     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
@@ -40,15 +48,14 @@ prompt agkozak-zsh-prompt
 AGKOZAK_COLORS_PROMPT_CHAR=yellow
 
 
-# MISC
+# Highlight on Tab
+zstyle ':completion:*:default' menu select
 
+# MISC
 # press Alt+. to insert the last word from the previous command
 autoload -U smart-insert-last-word
 zle -N smart-insert-last-word
 bindkey "\e." smart-insert-last-word
-
-# Highlight on tab
-zstyle ':completion:*' menu select
 
 
 # FUNCTIONS
@@ -102,7 +109,7 @@ alias zd="vim $ZDOTDIR"
 alias zu="source $ZDOTDIR/.zshrc"
 alias r="fc -e -"
 alias vim="nvim"
-alias ls="ls --color"
+alias ls="gls --color"
 alias la="ls -la"
 alias l="ls -l"
 
@@ -132,6 +139,7 @@ alias dev="cd ~/dev"
 alias class="~/dev/class/cs/"
 alias personal="cd ~/dev/personal/"
 alias 252="cd ~/dev/class/cs/252/projects/"
+alias conf="cd ~/.config"
 
 
 # PATH edits
